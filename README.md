@@ -1,1 +1,1 @@
-# QEMU Mini Cortext-M RTOS Kernel Project
+# QEMU Mini Cortext-M RTOS Kernel
