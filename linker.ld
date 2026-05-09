@@ -21,6 +21,8 @@ SECTIONS
     *(.rodata*)
   } > FLASH
 
+  _sidata = LOADADDR(.data);
+
   .data :
   {
     _sdata = .;
@@ -31,7 +33,7 @@ SECTIONS
   .bss : 
   {
     _sbss = .;
-    *(bss*)
+    *(.bss*)
     *(COMMON)
     _ebss = .;
   } > RAM
