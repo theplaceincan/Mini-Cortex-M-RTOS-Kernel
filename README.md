@@ -1,1 +1,1 @@
-# QEMU Mini Cortext-M RTOS Kernel
+# QEMU Mini Cortex-M RTOS Kernel
