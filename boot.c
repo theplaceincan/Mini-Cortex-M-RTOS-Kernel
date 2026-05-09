@@ -1,6 +1,5 @@
 #include <stdint.h>
 
-
 void Reset_Handler(void);
 int main(void);
 
