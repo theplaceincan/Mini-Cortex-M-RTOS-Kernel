@@ -1,6 +1,6 @@
 CC = arm-none-eabi-gcc
 
-CFLAGS = -mcpu=cortex-m3 -mthumb -ffreestanding -nostdlib -Wall -Wextra
+CFLAGS = -g -O0 -mcpu=cortex-m3 -mthumb -ffreestanding -nostdlib -Wall -Wextra
 LDFLAGS = -T linker.ld -nostdlib
 
 TARGET = firmware.elf
