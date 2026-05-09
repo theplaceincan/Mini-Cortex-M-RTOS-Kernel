@@ -1,0 +1,7 @@
+firmware.elf
+*.o
+*.bin
+*.hex
+*.map
+*.list
+*.dis
