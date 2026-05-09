@@ -4,6 +4,11 @@ void Reset_Handler(void);
 int main(void);
 
 extern uint32_t _estack; // end of stack, top of RAM
+extern uint32_t _sidata;
+extern uint32_t _sdata;
+extern uint32_t _edata;
+extern uint32_t _sbss;
+extern uint32_t _ebss;
 
 __attribute__((section(".isr_vector")))
 const uint32_t vector_table[] = {
@@ -19,6 +24,9 @@ int main(void) {
   }
 }
 
+// Copies .data initial values to RAM
+// Zero .bss
+// Call main
 void Reset_Handler(void) {
   main();
   while (1) {

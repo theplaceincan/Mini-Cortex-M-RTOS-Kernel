@@ -23,12 +23,16 @@ SECTIONS
 
   .data :
   {
+    _sdata = .;
     *(.data*)
+    _edata = .;
   } > RAM AT > FLASH
 
   .bss : 
   {
+    _sbss = .;
     *(bss*)
     *(COMMON)
+    _ebss = .;
   } > RAM
 }
