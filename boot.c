@@ -68,7 +68,6 @@ int main(void) {
 
 void Default_Handler(void) {
   while(1) {
-
   }
 }
 
