@@ -117,3 +117,7 @@ export PATH=/ucrt64/bin:$PATH
 gdb-multiarch firmware.elf
 ```
 
+
+---
+
+There may be small errors in this doc. I am writing this as I learn and develop this project.
