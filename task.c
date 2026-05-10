@@ -46,7 +46,7 @@ int create_task(struct Task t) {
       TASKSTACKS[i][SSIZE-2] = t.func_addr; // address of task function
 
       // LR
-      TASKSTACKS[i][SSIZE-3] = task_exit;
+      TASKSTACKS[i][SSIZE-3] = (uint32_t)task_exit;
 
       // R12
       TASKSTACKS[i][SSIZE-4] = 0;
