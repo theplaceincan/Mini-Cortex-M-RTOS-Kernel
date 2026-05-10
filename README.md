@@ -25,7 +25,7 @@ $3 = 123
 ```
 
 
-## 2. Interrupts
+## 2. Interrupts and SysTick
 
 This operating system uses SysTick, which gives us a simple first interrupt source/tool because the hardware of the ARM Cortex-M does most of the work. After the booting step, the next step is setting the values in specified memory addresses to initialize the systick, which is a counter that helps the OS know if time passed.
 
@@ -41,6 +41,23 @@ reload = 12,500 - 1 = 12,499
 
 So SysTick should count 12,500 ticks before sending an interrupt.
 
+Here is gdb debug output verifying that this works:
+```
+Breakpoint 1, main () at boot.c:54
+54        reached_main = 1;
+(gdb) print tick_count
+$1 = 0
+(gdb) continue
+Continuing.
+
+Program received signal SIGINT, Interrupt.
+main () at boot.c:65
+65        while (1) {
+(gdb) print tick_count
+$2 = 4571
+(gdb) 
+```
+
 ---
 
 ## Build
@@ -54,8 +71,8 @@ make
 
 ```bash
 export PATH=/ucrt64/bin:$PATH
-# qemu-system-arm -M lm3s6965evb -cpu cortex-m3 -kernel firmware.elf -nographic
 qemu-system-arm -M lm3s6965evb -cpu cortex-m3 -kernel firmware.elf -nographic -S -s
+# qemu-system-arm -M lm3s6965evb -cpu cortex-m3 -kernel firmware.elf -nographic
 ```
 
 
