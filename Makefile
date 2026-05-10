@@ -4,7 +4,7 @@ CFLAGS = -g -O0 -mcpu=cortex-m3 -mthumb -ffreestanding -nostdlib -Wall -Wextra
 LDFLAGS = -T linker.ld -nostdlib
 
 TARGET = firmware.elf
-SRCS = boot.c
+SRCS = boot.c task.c
 
 all: $(TARGET)
 
