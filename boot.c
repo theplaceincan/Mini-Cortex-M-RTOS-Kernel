@@ -10,7 +10,10 @@ extern uint32_t _edata;
 extern uint32_t _sbss;
 extern uint32_t _ebss;
 
-
+// interrupt initialization addresses
+volatile uint32_t* SYST_RVR_PTR = (uint32_t *)(0xE000E014);
+volatile uint32_t* SYST_CVR_PTR = (uint32_t *)(0xE000E018);
+volatile uint32_t* SYST_CSR_PTR = (uint32_t *)(0xE000E010);
 
 // for test purposes
 volatile uint32_t initialized_global = 123;
@@ -26,6 +29,17 @@ volatile uint32_t reached_main = 0;
 
 int main(void) {
   reached_main = 1;
+
+  // Tell SysTick to load 12499 (QEMU 12.5 MHz)
+  *SYST_RVR_PTR = 12499;
+
+  // clear  SysTick current count
+  *SYST_CVR_PTR = 0;
+
+  // enable SysTick with value 7
+  *SYST_CSR_PTR = 7;
+
+
   while (1) {
   }
 }
