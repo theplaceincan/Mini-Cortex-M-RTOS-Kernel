@@ -83,6 +83,8 @@ For a new task, `PC`, `xPSR`, `LR`, and `R0` are the most important values that 
 ![alt text](image.png)
 See `[Cortex-M3 Devices Generic User Guide](https://www.keil.com/dd/docs/datashts/arm/cortex_m3/r2p1/dui0552a_cortex_m3_dgug.pdf)`, page 39 on "Exception entry" for how this looks like on the stack frame and its details.
 
+R11 to R4 follow after R0 and can be initialized to 0 for a new task.
+
 ---
 
 ## Build
