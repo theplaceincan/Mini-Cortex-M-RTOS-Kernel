@@ -85,6 +85,10 @@ See `[Cortex-M3 Devices Generic User Guide](https://www.keil.com/dd/docs/datasht
 
 R11 to R4 follow after R0 and can be initialized to 0 for a new task.
 
+## 3. Scheduler
+
+## 4. PendSV Context Switching
+
 ---
 
 ## Build
