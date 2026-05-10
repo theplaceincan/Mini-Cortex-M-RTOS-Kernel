@@ -23,7 +23,7 @@ struct Task {
 struct Task TASKLIST[NTASK];
 uint32_t TASKSTACKS[NTASK][SSIZE];
 
-// Creates new task, adds to empty slot in TASKLIST and TASKSTACKS
+// Creates NEW task, adds to empty slot in TASKLIST and TASKSTACKS
 int create_task(struct Task t) {
 
   // Search for the next UNUSED task, replace with READY task
@@ -32,6 +32,7 @@ int create_task(struct Task t) {
       t.state = READY;
       TASKLIST[i] = t;
       TASKLIST[i].sp = &TASKSTACKS[i][SSIZE];
+      
       return 0;
     }
   }

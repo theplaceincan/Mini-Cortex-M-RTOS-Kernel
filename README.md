@@ -31,9 +31,9 @@ This operating system uses SysTick, which gives us a simple first interrupt sour
 
 For this QEMU board, the system clock is approximately 12.5 MHz. For SysTick, there are three values we need to set: 1) the `Control and Status Register`, 2) the `Reload Value Register`, and 3) the `Current Value Register`, where:
 
-Control and Status Register (SYST_RVR) == # of clock cycles between ticks
-Reload Value Register (SYST_CVR) == clears/restarts the current countdown
-Current Value Register (SYST_CSR) == enables SysTick, enables interrupts, and chooses clock source
+Control and Status Register (SYST_CSR) == # of clock cycles between ticks
+Reload Value Register (SYST_RVR) == clears/restarts the current countdown
+Current Value Register (SYST_CVR) == enables SysTick, enables interrupts, and chooses clock source
 
 For 12.5 MHz, to calculate how long SysTick should wait before firing an interrupt, 
 12,500,000 Hz (# of ticks sent) / 1000 Hz (# of interrupts per sec) = 12,500 cycles per millisecond
@@ -57,6 +57,31 @@ main () at boot.c:65
 $2 = 4571
 (gdb) 
 ```
+
+## 3. Tasks
+
+Tasks are the functions that the CPU will execute. Each task has its own stack, stack pointer (sp), id, and state. To organize tasks, this OS uses a TASKLIST and TASKSTACKS array.
+
+When the system restarts/begins, each task's value is zero'd (as it is stored in .bss).
+
+When we want to create a new task, we look for the first UNUSED task (task state being UNUSED). We take the new task and configure its stack to be executable, as if the task had already run previously, then we replace the UNUSED task in TASKLIST with the new task (set to READY).
+
+When a task is interrupted, a part of its context is stored on its stack by the CPU, including updating the task's stack pointer. When that task is ready to be run, the CPU will restore the context from the stack and restore the stack. When creating a new task, we need to configure its stack with fake data as if it was previously interrupted, that way it can seamlessly be added to the system as if it had already existed.
+
+The full task context includes:
+```
+R4-R11, which are manually restored
+R0-R3
+R12
+LR
+PC
+xPSR, which is automatically restored by exception return
+```
+
+For a new task, `PC`, `xPSR`, `LR`, and `R0` are the most important values that need to be configured.
+
+![alt text](image.png)
+See `[Cortex-M3 Devices Generic User Guide](https://www.keil.com/dd/docs/datashts/arm/cortex_m3/r2p1/dui0552a_cortex_m3_dgug.pdf)`, page 39 on "Exception entry" for how this looks like on the stack frame and its details.
 
 ---
 
