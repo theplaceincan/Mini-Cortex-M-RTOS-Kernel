@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 #define NTASK 10
+#define SSIZE 256
 
 enum STATE {
   WAITING,
@@ -17,3 +18,4 @@ struct Task {
 };
 
 struct Task TASKLIST[NTASK];
+uint32_t TASKSTACKS[NTASK][SSIZE];
