@@ -1,12 +1,10 @@
 # Mini ARM Cortex-M RTOS Kernel using QEMU
 
-Rework in progress...
+QEMU: lm3s6965evb
 
----
+## Development Log of the ARM Cortex-M Mini-RTOS
 
-## Development of the ARM Cortex-M Mini-RTOS
-
-*Development Log*
+I use this section to write down my understanding of each step as I write this mini RTOS kernel. This is an in-order development log starting from the beginning, which goes through my understanding and justifications for specific design choices.
 
 ---
 
@@ -38,7 +36,7 @@ The first thing that the CPU does after/at a reset is read the word stored at `0
 
 The word at `0x00000004`, which gets loaded into the PC, is the reset vector, which is the address of `Reset_Handler`. Since this is an address that the CPU will jump to for running code, its bit 0 needs to be 1 when it is stored (an old requirement to differentiate between ARM and Thumb instructions for executing code. This specific CPU only uses Thumb instructions, but this requirement is still held for compatibility reasons). After the CPU reads the address of the `Reset_Handler`, it takes that word's bit 0 and copies it into the T-bit switch. The rest of the word is copied into PC. Afterwards, for each instruction ever run on the CPU, the CPU will check this T-bit switch to know whether to run the instruction in Thumb or ARM mode (this specific CPU cannot do ARM, so the T-bit being 0 will create a fault).
 
-**Source:** Page 17, *The Cortex-M3 Processor*
+**Source:** Page 17, *Cortex™-M3 Devices Generic User Guide*
 
 #### Some additional notes
 
