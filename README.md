@@ -8,7 +8,7 @@ I use this section to write down my understanding of each step as I write this m
 
 ---
 
-### Software Installation - 10/26/2026
+### Software Installation
 
 ```bash
 pacman -S mingw-w64-ucrt-x86_64-arm-none-eabi-gcc mingw-w64-ucrt-x86_64-qemu
@@ -22,7 +22,7 @@ pacman -S mingw-w64-ucrt-x86_64-arm-none-eabi-gcc mingw-w64-ucrt-x86_64-qemu
 
 We already have `gdb-multiarch`, which is our debugger. This lets us pause the fake QEMU chip and run the program one line at a time, while letting us view the registers and memory as the program progresses.
 
-### Github Setup - 10/21/2026
+### Github Setup
 
 1. Set aside exiting code as "attempt-1", created a new branch called "rework"
 
@@ -46,5 +46,30 @@ The T-bit is a single bit in the xPSR register. The xPSR register is a special-p
 
 It is common convention to define the location of the SP to be at the top of the RAM in order to use the most space. The SP-4 will be the beginning of the stack since the stack will grow downward from there (each `push` subtracts before writing). There is no automatically defined end to the stack, so it's our responsibility to define it in order to prevent stack overflows, since otherwise it will just write over variables stored in RAM. Also, there are two stack pointers: MSP and PSP. "SP" just refers to whichever one is being used. It is convention that MSP is used for the kernel and interrupts and PSP is used for tasks.
 
-### 2. GDB walkthrough
+#### GDB walkthrough
+
+1. The vector table with 2 words in flash
+2. FIrst word was loaded in SP, second was loaded into PC -1
+3. LR is the reset value
+4. For the xPSR, the second 1 is the T-bit, which is correctly 1 (Thumbs)
+5. The first push, which is made by the compiler, happens with stepi
+
+![GDB walkthrough](docs/images/gdb_walkthrough_1.png)
+![GDB walkthrough](docs/images/gdb_walkthrough_2.png)
+
+
+### 2. Writing the linker
+
+The linker.ld file follows a specific syntax format. It needs `MEMORY`, `SECTIONS`, input patterns, location counter, symbols, `AT>`, `LOADADDR`, `KEEP`, and `ENTRY`.
+
+Remember the difference between the LINKER and the RESET_HANDLER. The linker just defines symbols, and the Reset_Handler uses them to know what to copy and what to zero out. For example, in our attempt-1, I had this set up:
+
+```
+00000288  _sidata   ← where .data's starting values are stored (flash)
+20000000  _sdata    ← start of .data in RAM
+20000010  _edata    ← end of .data in RAM
+20000010  _sbss     ← start of .bss
+200028bc  _ebss     ← end of .bss
+20010000  _estack   ← initial stack pointer (top of RAM)
+```
 
