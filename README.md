@@ -60,16 +60,29 @@ It is common convention to define the location of the SP to be at the top of the
 
 ### 2. Writing the linker
 
-The linker.ld file follows a specific syntax format. It needs `MEMORY`, `SECTIONS`, input patterns, location counter, symbols, `AT>`, `LOADADDR`, `KEEP`, and `ENTRY`.
-
-Remember the difference between the LINKER and the RESET_HANDLER. The linker just defines symbols, and the Reset_Handler uses them to know what to copy and what to zero out. For example, in our attempt-1, I had this set up:
-
 ```
-00000288  _sidata   ← where .data's starting values are stored (flash)
-20000000  _sdata    ← start of .data in RAM
-20000010  _edata    ← end of .data in RAM
-20000010  _sbss     ← start of .bss
-200028bc  _ebss     ← end of .bss
-20010000  _estack   ← initial stack pointer (top of RAM)
+00000288  _sidata   - where .data's starting values are stored (flash)
+20000000  _sdata    - start of .data in RAM
+20000010  _edata    - end of .data in RAM
+20000010  _sbss     - start of .bss
+200028bc  _ebss     - end of .bss
+20010000  _estack   - initial stack pointer (top of RAM)
 ```
 
+Restored old linker script
+
+### 3. Context
+
+When taking a task off to run another, you save the task context. That context are registered stored in the stack, which are:
+
+```
+r0-15          - general-purpose registers
+SP (r13)       - task's stack pointer
+LR (r14)       - return address
+PC (r15)       - where the task was
+xPSR           - flags, plus the T-bit
+```
+
+The good thing is that ARM saves half of the context for us. WHenever an exception fires, the CPU will automatically push 8 registers onto the current stack before our handler even does anything.
+
+The only registers not saved are `r4-11` (the ARM calling convention says r0-3, r12, and LR are saved registers). We use PendSV handler to push these ourselves in assembly
